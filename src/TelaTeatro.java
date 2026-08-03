@@ -50,6 +50,12 @@ public class TelaTeatro {
                 botoes[i][j] = btn;
                 grade.add(btn);
 
+                int linha = i;
+                int coluna = j;
+
+                btn.addActionListener(e -> clicarAssento(linha, coluna));
+
+
             }
 
         }
@@ -204,6 +210,11 @@ public class TelaTeatro {
             }
         }
 
+    }
+
+    public void clicarAssento(int linha, int coluna){
+        System.out.println(linha +" "+coluna);
+        //deu certo
     }
 
 
