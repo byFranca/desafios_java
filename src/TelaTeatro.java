@@ -20,9 +20,11 @@ public class TelaTeatro {
     Color amarelo = new Color(217, 217, 22);
     Color vermelho = new Color(248, 9, 0);
     Color azul = new Color(11, 65, 175, 255);
+    Color preto = new Color(0, 0, 0);
 
 
     JFrame frame = new JFrame();
+    JLabel lblModo = new JLabel();
 
     public TelaTeatro() {
         //pedirPreco();
@@ -70,7 +72,9 @@ public class TelaTeatro {
         titulo.setFont(new Font("Arial", Font.BOLD, 22));
         painelSuperior.add(titulo, BorderLayout.NORTH);
 
-        JLabel lblModo = new JLabel("Modo atual: Visualização", SwingConstants.CENTER);
+        lblModo.setText("Modo atual: Visualização");
+        lblModo.setHorizontalAlignment(SwingConstants.CENTER);
+        lblModo.setForeground(preto);
         lblModo.setFont(new Font("Arial", Font.BOLD, 14));
         painelSuperior.add(lblModo, BorderLayout.CENTER);
 
@@ -130,22 +134,20 @@ public class TelaTeatro {
             }
         });
 
-        btnCompra.addActionListener(e ->{
+        btnCompra.addActionListener(e -> {
             quantidade = pedirQuantidade("Comprar", "compra");
-            if(quantidade != -1){
+            if (quantidade != -1) {
                 modo = 2;
                 lblModo.setText("Modo atual: compra  -  clique no(s) " + quantidade + " assentos livres que deseja comprar!");
                 lblModo.setForeground(vermelho);
             }
         });
 
-        btnCancelaReserva.addActionListener(e ->{
-            quantidade = pedirQuantidade("cancelar reserva", "cancelar");
-            if(quantidade != -1){
-                modo = 3;
-                lblModo.setText("Modo atual: Cancelamento de reserva  -  clique no(s) " + quantidade + " reservados que deseja cancelar!");
-                lblModo.setForeground(amarelo);
-            }
+        btnCancelaReserva.addActionListener(e -> {
+            modo = 3;
+            lblModo.setText("Modo atual: Cancelamento de reserva  -  clique no assento reservados que deseja cancelar!");
+            lblModo.setForeground(amarelo);
+
         });
 
 
@@ -212,9 +214,64 @@ public class TelaTeatro {
 
     }
 
-    public void clicarAssento(int linha, int coluna){
-        System.out.println(linha +" "+coluna);
-        //deu certo
+    public void clicarAssento(int linha, int coluna) {
+        if (modo == 0) {
+            JOptionPane.showMessageDialog(null, "Selecione uma opção do menu", "Nenhum metodo selecionado", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (modo == 1) {
+            if (assentos[linha][coluna] == 'L') {
+                assentos[linha][coluna] = 'R';
+                botoes[linha][coluna].setBackground(amarelo);
+                botoes[linha][coluna].setText("R");
+                quantidade--;
+                if (quantidade == 0) {
+                    lblModo.setText("Modo atual: Visualização");
+                    lblModo.setForeground(preto);
+                    JOptionPane.showMessageDialog(null, "Acabaram as reservas!");
+                    modo = 0;
+                } else {
+                    lblModo.setText("Modo atual: Reserva  -  clique no(s) " + quantidade + " assentos livres que deseja reservar!");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Esse assento ja esta ocupado, por favor, escolha outro", "Assento indisponivel", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+        if (modo == 2) {
+            if (assentos[linha][coluna] == 'L') {
+                assentos[linha][coluna] = 'X';
+                botoes[linha][coluna].setBackground(vermelho);
+                botoes[linha][coluna].setText("X");
+                quantidade--;
+                if (quantidade == 0) {
+                    lblModo.setText("Modo atual: Visualização");
+                    lblModo.setForeground(preto);
+                    JOptionPane.showMessageDialog(null, "Acabaram as Compras!");
+                    modo = 0;
+                } else {
+                    lblModo.setText("Modo atual: Compra  -  clique no(s) " + quantidade + " assentos livres que deseja comprar!");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Esse assento ja esta ocupado, por favor, escolha outro", "Assento indisponivel", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+        if (modo == 3) {
+            if (assentos[linha][coluna] == 'R') {
+                assentos[linha][coluna] = 'L';
+                botoes[linha][coluna].setText("L");
+                botoes[linha][coluna].setBackground(verde);
+                modo = 0;
+                lblModo.setText("Modo atual: Visualização");
+                lblModo.setForeground(preto);
+                JOptionPane.showMessageDialog(null, "Reserva cancelada");
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Esse assento nao esta reservado, por favor, escolha outro", "Assento indisponivel", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 
 
