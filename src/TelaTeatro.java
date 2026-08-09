@@ -3,8 +3,8 @@ import java.awt.*;
 
 public class TelaTeatro {
 
-    int linhas = 10;
-    int colunas = 10;
+    int linhas = 20;
+    int colunas = 20;
     char[][] assentos = new char[linhas][colunas];
     JButton[][] botoes = new JButton[linhas][colunas];
 
@@ -27,7 +27,7 @@ public class TelaTeatro {
     JLabel lblModo = new JLabel();
 
     public TelaTeatro() {
-        //pedirPreco();
+        pedirPreco();
 
         for (int i = 0; i < linhas; i++) {
             for (int j = 0; j < colunas; j++) {
@@ -148,6 +148,10 @@ public class TelaTeatro {
             lblModo.setText("Modo atual: Cancelamento de reserva  -  clique no assento reservados que deseja cancelar!");
             lblModo.setForeground(amarelo);
 
+        });
+
+        btnRelatorio.addActionListener(e->{
+            mostrarRelatorio();
         });
 
 
@@ -272,6 +276,50 @@ public class TelaTeatro {
                 JOptionPane.showMessageDialog(null, "Esse assento nao esta reservado, por favor, escolha outro", "Assento indisponivel", JOptionPane.ERROR_MESSAGE);
             }
         }
+    }
+
+    public void mostrarRelatorio(){
+        char letra;
+        int livres = 0;
+        int reservados = 0;
+        int comprados = 0;
+        for(int i =0; i<linhas; i++){
+            for (int j = 0; j < colunas; j++) {
+                letra = assentos[i][j];
+                if (letra == 'L'){
+                    livres++;
+                    continue;
+                }
+                if(letra == 'R'){
+                    reservados++;
+                    continue;
+                }
+                if(letra == 'X'){
+                    comprados++;
+                    continue;
+                }
+
+            }
+        }
+
+        int totalAssentos = linhas*colunas;
+        double totalEmReservas = reservados*precoReserva;
+        double lucroPotencial = totalAssentos*precoInteiro;
+        double totalEmCompras = comprados*precoInteiro;
+        double totalArrecadado = totalEmCompras+totalEmReservas;
+
+        String texto = "\n===== RELATORIO =====\n"+
+                "Assentos livres: "+livres+
+                "\nAssentos reservados:"+reservados+
+                "\nAssentos comprados: "+comprados+
+                "\nTotal de assentos na sala: "+totalAssentos+
+                "\nTotal em reservas: "+totalEmReservas+
+                "\nTotal em compras: "+totalEmCompras+
+                "\nLucro arrecadado: "+totalArrecadado+
+                "\nLucro potencial maximo: "+lucroPotencial;
+
+
+        JOptionPane.showMessageDialog(null, texto, "RELATORIO FINANCEIRO", JOptionPane.INFORMATION_MESSAGE);
     }
 
 
