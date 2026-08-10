@@ -40,6 +40,7 @@ public class TelaTeatro {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setLayout(new BorderLayout(10, 10));
+        frame.setResizable(false);
 
         //Grade dos assentos
         JPanel grade = new JPanel(new GridLayout(linhas, colunas, 5, 5));
