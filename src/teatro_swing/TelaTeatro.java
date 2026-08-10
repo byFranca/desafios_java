@@ -1,3 +1,5 @@
+package teatro_swing;
+
 import javax.swing.*;
 import java.awt.*;
 

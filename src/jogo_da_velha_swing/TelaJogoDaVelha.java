@@ -1,3 +1,5 @@
+package jogo_da_velha_swing;
+
 import javax.swing.*;
 import java.awt.*;
 
