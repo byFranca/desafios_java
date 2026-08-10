@@ -39,18 +39,20 @@ public class TelaTeatro {
         frame.setSize(1400, 850);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
-        frame.setLayout(new BorderLayout(10, 10));
+        frame.setLayout(new BorderLayout(5, 5));
         frame.setResizable(false);
 
         //Grade dos assentos
-        JPanel grade = new JPanel(new GridLayout(linhas, colunas, 5, 5));
-        grade.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        JPanel grade = new JPanel(new GridLayout(linhas, colunas, 2, 2));
+        grade.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
         for (int i = 0; i < linhas; i++) {
             for (int j = 0; j < colunas; j++) {
-                JButton btn = new JButton("L");
+                JButton btn = new JButton();
                 btn.setBackground(verde);
+                btn.setFocusable(false);
                 botoes[i][j] = btn;
+                botoes[i][j].setFocusable(false);
                 grade.add(btn);
 
                 int linha = i;
@@ -67,7 +69,7 @@ public class TelaTeatro {
 
         //painel superior
         JPanel painelSuperior = new JPanel(new BorderLayout());
-        painelSuperior.setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
+        painelSuperior.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
         JLabel titulo = new JLabel("TEATRO - Sistema de Reservas", SwingConstants.CENTER);
         titulo.setFont(new Font("Arial", Font.BOLD, 22));
@@ -93,6 +95,11 @@ public class TelaTeatro {
         JButton btnCancelaReserva = new JButton("Cancelar reserva");
         JButton btnRelatorio = new JButton("Mostrar relatório");
         JButton btnSair = new JButton("Sair");
+        btnReserva.setFocusable(false);
+        btnCompra.setFocusable(false);
+        btnCancelaReserva.setFocusable(false);
+        btnRelatorio.setFocusable(false);
+        btnSair.setFocusable(false);
 
         btnReserva.setAlignmentX(JComponent.CENTER_ALIGNMENT);
         btnCompra.setAlignmentX(JComponent.CENTER_ALIGNMENT);
@@ -229,7 +236,6 @@ public class TelaTeatro {
             if (assentos[linha][coluna] == 'L') {
                 assentos[linha][coluna] = 'R';
                 botoes[linha][coluna].setBackground(amarelo);
-                botoes[linha][coluna].setText("R");
                 quantidade--;
                 if (quantidade == 0) {
                     lblModo.setText("Modo atual: Visualização");
@@ -248,7 +254,6 @@ public class TelaTeatro {
             if (assentos[linha][coluna] == 'L') {
                 assentos[linha][coluna] = 'X';
                 botoes[linha][coluna].setBackground(vermelho);
-                botoes[linha][coluna].setText("X");
                 quantidade--;
                 if (quantidade == 0) {
                     lblModo.setText("Modo atual: Visualização");
@@ -266,7 +271,6 @@ public class TelaTeatro {
         if (modo == 3) {
             if (assentos[linha][coluna] == 'R') {
                 assentos[linha][coluna] = 'L';
-                botoes[linha][coluna].setText("L");
                 botoes[linha][coluna].setBackground(verde);
                 modo = 0;
                 lblModo.setText("Modo atual: Visualização");
