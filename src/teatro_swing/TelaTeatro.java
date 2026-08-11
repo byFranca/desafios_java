@@ -17,12 +17,19 @@ public class TelaTeatro {
     int modo = 0;
     int quantidade = 0;
 
+    int totalAssentos = linhas * colunas;
+    int livres = totalAssentos;
+    int reservados = 0;
+    int comprados = 0;
 
-    Color verde = new Color(17, 188, 22);
-    Color amarelo = new Color(217, 217, 22);
-    Color vermelho = new Color(248, 9, 0);
-    Color azul = new Color(11, 65, 175, 255);
+
+    Color verde = new Color(46, 204, 113);
+    Color amarelo = new Color(241, 196, 15);
+    Color vermelho = new Color(231, 76, 60);
+    Color azul = new Color(52, 152, 219);
     Color preto = new Color(0, 0, 0);
+    Color branco = new Color(236, 240, 241);
+    Color cinza = new Color(44, 62, 80);
 
 
     JFrame frame = new JFrame();
@@ -47,6 +54,7 @@ public class TelaTeatro {
         //Grade dos assentos
         JPanel grade = new JPanel(new GridLayout(linhas, colunas, 2, 2));
         grade.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        grade.setBackground(cinza);
 
         for (int i = 0; i < linhas; i++) {
             for (int j = 0; j < colunas; j++) {
@@ -71,20 +79,21 @@ public class TelaTeatro {
 
         //painel superior
         JPanel painelSuperior = new JPanel(new BorderLayout());
-        painelSuperior.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        painelSuperior.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        painelSuperior.setBackground(branco);
 
         JLabel titulo = new JLabel("TEATRO - Sistema de Reservas", SwingConstants.CENTER);
-        titulo.setFont(new Font("Arial", Font.BOLD, 22));
+        titulo.setFont(new Font("Arial", Font.BOLD, 24));
         painelSuperior.add(titulo, BorderLayout.NORTH);
 
         lblModo.setText("Modo atual: Visualização");
         lblModo.setHorizontalAlignment(SwingConstants.CENTER);
         lblModo.setForeground(preto);
-        lblModo.setFont(new Font("Arial", Font.BOLD, 14));
+        lblModo.setFont(new Font("Arial", Font.BOLD, 15));
         painelSuperior.add(lblModo, BorderLayout.CENTER);
 
         JLabel lblPreco = new JLabel("Preço do ingresso inteiro: " + precoInteiro + "R$", SwingConstants.CENTER);
-        lblPreco.setFont(new Font("Arial", Font.BOLD, 12));
+        lblPreco.setFont(new Font("Arial", Font.BOLD, 13));
         painelSuperior.add(lblPreco, BorderLayout.SOUTH);
 
         frame.add(painelSuperior, BorderLayout.NORTH);
@@ -92,6 +101,7 @@ public class TelaTeatro {
 
         //painel lateral
         JPanel painelLateral = new JPanel();
+        painelLateral.setBackground(branco);
         JButton btnReserva = new JButton("Reservar assento");
         JButton btnCompra = new JButton("Comprar assento");
         JButton btnCancelaReserva = new JButton("Cancelar reserva");
@@ -110,6 +120,7 @@ public class TelaTeatro {
         btnSair.setAlignmentX(JComponent.CENTER_ALIGNMENT);
 
         JPanel espBotoes = new JPanel();
+        espBotoes.setBackground(branco);
         espBotoes.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         espBotoes.setLayout(new BoxLayout(espBotoes, BoxLayout.Y_AXIS));
 
@@ -160,7 +171,7 @@ public class TelaTeatro {
 
         });
 
-        btnRelatorio.addActionListener(e->{
+        btnRelatorio.addActionListener(e -> {
             mostrarRelatorio();
         });
 
@@ -178,8 +189,8 @@ public class TelaTeatro {
         try {
             int qtd = Integer.parseInt(entrada);
 
-            if (qtd <= 0) {
-                JOptionPane.showMessageDialog(null, "A quantidade deve ser maior que zero!!");
+            if (qtd <= 0 || qtd >= livres) {
+                JOptionPane.showMessageDialog(null, "A quantidade deve estar dentro dos limites do teatro!!");
                 return -1;
             }
 
@@ -238,6 +249,8 @@ public class TelaTeatro {
             if (assentos[linha][coluna] == 'L') {
                 assentos[linha][coluna] = 'R';
                 botoes[linha][coluna].setBackground(amarelo);
+                livres--;
+                reservados++;
                 quantidade--;
                 if (quantidade == 0) {
                     lblModo.setText("Modo atual: Visualização");
@@ -253,9 +266,20 @@ public class TelaTeatro {
         }
 
         if (modo == 2) {
-            if (assentos[linha][coluna] == 'L') {
+            if (assentos[linha][coluna] == 'L' || assentos[linha][coluna] == 'R') {
+
+                if (assentos[linha][coluna] == 'L') {
+                    livres--;
+                }
+
+                if (assentos[linha][coluna] == 'R') {
+                    reservados--;
+                }
+
                 assentos[linha][coluna] = 'X';
                 botoes[linha][coluna].setBackground(vermelho);
+
+                comprados++;
                 quantidade--;
                 if (quantidade == 0) {
                     lblModo.setText("Modo atual: Visualização");
@@ -274,6 +298,8 @@ public class TelaTeatro {
             if (assentos[linha][coluna] == 'R') {
                 assentos[linha][coluna] = 'L';
                 botoes[linha][coluna].setBackground(verde);
+                reservados--;
+                livres++;
                 modo = 0;
                 lblModo.setText("Modo atual: Visualização");
                 lblModo.setForeground(preto);
@@ -285,53 +311,26 @@ public class TelaTeatro {
         }
     }
 
-    public void mostrarRelatorio(){
+    public void mostrarRelatorio() {
         char letra;
-        int livres = 0;
-        int reservados = 0;
-        int comprados = 0;
-        for(int i =0; i<linhas; i++){
-            for (int j = 0; j < colunas; j++) {
-                letra = assentos[i][j];
-                if (letra == 'L'){
-                    livres++;
-                    continue;
-                }
-                if(letra == 'R'){
-                    reservados++;
-                    continue;
-                }
-                if(letra == 'X'){
-                    comprados++;
-                    continue;
-                }
 
-            }
-        }
 
-        int totalAssentos = linhas*colunas;
-        double totalEmReservas = reservados*precoReserva;
-        double lucroPotencial = totalAssentos*precoInteiro;
-        double totalEmCompras = comprados*precoInteiro;
-        double totalArrecadado = totalEmCompras+totalEmReservas;
+        double totalEmReservas = reservados * precoReserva;
+        double lucroPotencial = totalAssentos * precoInteiro;
+        double totalEmCompras = comprados * precoInteiro;
+        double totalArrecadado = totalEmCompras + totalEmReservas;
 
-        String texto = "\n===== RELATORIO =====\n"+
-                "Assentos livres: "+livres+
-                "\nAssentos reservados:"+reservados+
-                "\nAssentos comprados: "+comprados+
-                "\nTotal de assentos na sala: "+totalAssentos+
-                "\nTotal em reservas: "+totalEmReservas+
-                "\nTotal em compras: "+totalEmCompras+
-                "\nLucro arrecadado: "+totalArrecadado+
-                "\nLucro potencial maximo: "+lucroPotencial;
+        String texto = "\n===== RELATORIO =====\n" +
+                "Assentos livres: " + livres +
+                "\nAssentos reservados:" + reservados +
+                "\nAssentos comprados: " + comprados +
+                "\nTotal de assentos na sala: " + totalAssentos +
+                "\nTotal em reservas: " + totalEmReservas +
+                "\nTotal em compras: " + totalEmCompras +
+                "\nLucro arrecadado: " + totalArrecadado +
+                "\nLucro potencial maximo: " + lucroPotencial;
 
 
         JOptionPane.showMessageDialog(null, texto, "RELATORIO FINANCEIRO", JOptionPane.INFORMATION_MESSAGE);
-    }
-
-
-    public static void main(String[] args) {
-        new TelaTeatro();
-
     }
 }
