@@ -5,6 +5,7 @@ import java.awt.*;
 
 public class TelaTeatro {
 
+    //para nao quebrar, tem que ter no maximo 26 (letras do alfabeto)
     int linhas = 20;
     int colunas = 20;
     char[][] assentos = new char[linhas][colunas];
@@ -52,27 +53,41 @@ public class TelaTeatro {
         frame.setResizable(false);
 
         //Grade dos assentos
-        JPanel grade = new JPanel(new GridLayout(linhas, colunas, 2, 2));
+        JPanel grade = new JPanel(new GridLayout(linhas + 1, colunas + 1, 2, 2));
         grade.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        grade.setBackground(cinza);
+        grade.setBackground(new Color(44, 62, 80));
 
-        for (int i = 0; i < linhas; i++) {
-            for (int j = 0; j < colunas; j++) {
-                JButton btn = new JButton();
-                btn.setBackground(verde);
-                btn.setFocusable(false);
-                botoes[i][j] = btn;
-                botoes[i][j].setFocusable(false);
-                grade.add(btn);
+        for (int i = 0; i <= linhas; i++) {
+            for (int j = 0; j <= colunas; j++) {
 
-                int linha = i;
-                int coluna = j;
+                if (i == 0 && j == 0) {
+                    JLabel vazio = new JLabel("");
+                    grade.add(vazio);
+                }else if (i == 0) {
+                    JLabel lblColuna = new JLabel(String.valueOf((char) ('A' + j - 1)), SwingConstants.CENTER);
+                    lblColuna.setForeground(Color.WHITE);
+                    lblColuna.setFont(new Font("Arial", Font.BOLD, 12));
+                    grade.add(lblColuna);
+                }else if (j == 0) {
+                    JLabel lblFileira = new JLabel(String.valueOf(i), SwingConstants.CENTER);
+                    lblFileira.setForeground(Color.WHITE);
+                    lblFileira.setFont(new Font("Arial", Font.BOLD, 12));
+                    grade.add(lblFileira);
+                }else {
+                    JButton btn = new JButton();
+                    btn.setBackground(verde);
+                    btn.setFocusable(false);
 
-                btn.addActionListener(e -> clicarAssento(linha, coluna));
+                    // Importante: o assento real fica em [i-1][j-1]
+                    botoes[i - 1][j - 1] = btn;
+                    grade.add(btn);
 
+                    int linha = i - 1;
+                    int coluna = j - 1;
 
+                    btn.addActionListener(e -> clicarAssento(linha, coluna));
+                }
             }
-
         }
         JScrollPane gradeScroll = new JScrollPane(grade);
         frame.add(gradeScroll, BorderLayout.CENTER);
