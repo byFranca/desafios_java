@@ -3,93 +3,105 @@ package jogo_da_velha_swing;
 import javax.swing.*;
 import java.awt.*;
 
-public class TelaJogoDaVelha {
+public class TelaJogoDaVelha{
+
     int linhas = 3;
     int colunas = 3;
-    char modo = 'X';
-    int jogadas = 0;
+
     char[][] tabuleiro = new char[linhas][colunas];
     JButton[][] botoes = new JButton[linhas][colunas];
 
-    Color azul = new Color(0, 134, 215);
-    Color verde = new Color(16, 171, 37);
-    Color vermelho = new Color(189, 10, 10);
+    char jogadorAtual;
+    int jogadas;
+    boolean jogoAtivo;
 
-    JFrame frame = new JFrame();
+    // Cores
+    Color corFundo = new Color(0, 134, 215);
+    Color corX = new Color(16, 171, 37);
+    Color corO = new Color(189, 10, 10);
+    Color corVencedor = new Color(255, 215, 0); // dourado
 
-    public TelaJogoDaVelha() {
+    Color verde = new Color(46, 204, 113);
 
-        for (int i = 0; i < linhas; i++) {
-            for (int j = 0; j < colunas; j++) {
+    JFrame frame;
+    JLabel lblVez;
+
+    public TelaJogoDaVelha(){
+        iniciarTabuleiro();
+        iniciarInterface();
+    }
+
+    public void iniciarTabuleiro(){
+        for(int i =0; i<linhas; i++){
+            for(int j =0; j<colunas; j++){
                 tabuleiro[i][j] = '-';
 
             }
-
         }
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setTitle("JOGO DA VELHA");
-        frame.setSize(1000, 700);
-        frame.setLocationRelativeTo(null);
-        frame.setResizable(false);
-        frame.setLayout(new BorderLayout(10, 10));
+        jogadas = 0;
+        jogadorAtual = 'X';
+        jogoAtivo = true;
+    }
 
-        JPanel grade = new JPanel(new GridLayout(linhas, colunas, 5, 5));
-        grade.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+    public void iniciarInterface(){
+        frame = new JFrame();
+        frame.setTitle("JOGO DA VELHA");
+        frame.setSize(500,500);
+        frame.setLocationRelativeTo(null);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+
+        JPanel painelSuperior = new JPanel(new BorderLayout());
+        painelSuperior.setBorder(BorderFactory.createEmptyBorder(15,10,10,10));
+
+        JLabel titulo = new JLabel("JOGO DA VELHA", SwingConstants.CENTER);
+        titulo.setFont(new Font("Arial", Font.BOLD, 28));
+        painelSuperior.add(titulo, BorderLayout.NORTH);
+
+        lblVez = new JLabel("Vez do jogador: X", SwingConstants.CENTER);
+        lblVez.setFont(new Font("Arial", Font.BOLD, 18));
+        lblVez.setForeground(corX);
+        painelSuperior.add(lblVez, BorderLayout.CENTER);
+
+        frame.add(painelSuperior, BorderLayout.NORTH);
+
+        // Grade 3x3
+        JPanel grade = new JPanel(new GridLayout(linhas, colunas, 8, 8));
+        grade.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        grade.setBackground(Color.DARK_GRAY);
 
         for (int i = 0; i < linhas; i++) {
             for (int j = 0; j < colunas; j++) {
-                JButton btn = new JButton("-");
-                btn.setFont(new Font("Arial", Font.BOLD, 40));
-                btn.setBackground(azul);
-                botoes[i][j] = btn;
-                grade.add(btn);
+                JButton btn = new JButton("");
+                btn.setFont(new Font("Arial", Font.BOLD, 48));
+                btn.setBackground(corFundo);
+                btn.setFocusPainted(false);
+                btn.setForeground(Color.WHITE);
 
                 final int linha = i;
                 final int coluna = j;
 
-                btn.addActionListener(e -> marcarBotao(linha, coluna));
+                btn.addActionListener(e-> realizarJogada(linha, coluna));
 
+                botoes[i][j] = btn;
+                grade.add(btn);
             }
-
         }
 
-        JScrollPane gradeScroll = new JScrollPane(grade);
-        frame.add(gradeScroll, BorderLayout.CENTER);
-
+        frame.add(grade, BorderLayout.CENTER);
         frame.setVisible(true);
 
     }
-
-    public void marcarBotao(int linha, int coluna) {
-        char lugar = tabuleiro[linha][coluna];
-        if (lugar == '-') {
-
-            if (modo == 'X') {
-                tabuleiro[linha][coluna] = 'X';
-                botoes[linha][coluna].setBackground(verde);
-                botoes[linha][coluna].setText("X");
-                modo = 'O';
-                jogadas++;
-                return;
-            }
-
-            if (modo == 'O') {
-                tabuleiro[linha][coluna] = 'O';
-                botoes[linha][coluna].setBackground(vermelho);
-                botoes[linha][coluna].setText("O");
-                modo = 'X';
-                jogadas++;
-                return;
-            }
-
-        } else {
-            System.out.println("erro");
+    
+    public void realizarJogada(int linha, int coluna){
+        if(tabuleiro[linha][coluna] == '-'){
+            botoes[linha][coluna].setBackground(verde);
+            tabuleiro[linha][coluna] = 'X';
+        }else{
+            botoes[linha][coluna].setBackground(corFundo);
+            tabuleiro[linha][coluna] = '-';
         }
-    }
-
-    public static void main(String[] args) {
-        new TelaJogoDaVelha();
     }
 
 }

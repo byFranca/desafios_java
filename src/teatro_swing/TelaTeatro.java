@@ -63,13 +63,13 @@ public class TelaTeatro {
                 if (i == 0 && j == 0) {
                     JLabel vazio = new JLabel("");
                     grade.add(vazio);
-                }else if (i == 0) {
-                    JLabel lblColuna = new JLabel(String.valueOf((char) ('A' + j - 1)), SwingConstants.CENTER);
+                }else if (j == 0) {
+                    JLabel lblColuna = new JLabel(String.valueOf((char) ('A' + i - 1)), SwingConstants.CENTER);
                     lblColuna.setForeground(Color.WHITE);
                     lblColuna.setFont(new Font("Arial", Font.BOLD, 12));
                     grade.add(lblColuna);
-                }else if (j == 0) {
-                    JLabel lblFileira = new JLabel(String.valueOf(i), SwingConstants.CENTER);
+                }else if (i == 0) {
+                    JLabel lblFileira = new JLabel(String.valueOf(j), SwingConstants.CENTER);
                     lblFileira.setForeground(Color.WHITE);
                     lblFileira.setFont(new Font("Arial", Font.BOLD, 12));
                     grade.add(lblFileira);
