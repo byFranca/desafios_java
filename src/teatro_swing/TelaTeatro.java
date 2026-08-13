@@ -55,7 +55,7 @@ public class TelaTeatro {
         //Grade dos assentos
         JPanel grade = new JPanel(new GridLayout(linhas + 1, colunas + 1, 2, 2));
         grade.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        grade.setBackground(new Color(44, 62, 80));
+        grade.setBackground(cinza);
 
         for (int i = 0; i <= linhas; i++) {
             for (int j = 0; j <= colunas; j++) {
