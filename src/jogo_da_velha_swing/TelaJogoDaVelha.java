@@ -95,13 +95,37 @@ public class TelaJogoDaVelha{
     }
     
     public void realizarJogada(int linha, int coluna){
-        if(tabuleiro[linha][coluna] == '-'){
-            botoes[linha][coluna].setBackground(verde);
-            tabuleiro[linha][coluna] = 'X';
-        }else{
-            botoes[linha][coluna].setBackground(corFundo);
-            tabuleiro[linha][coluna] = '-';
+        if (!verificarEspacoVazio(linha, coluna)){
+            return;
         }
+
+        tabuleiro[linha][coluna] = jogadorAtual;
+        botoes[linha][coluna].setText(String.valueOf(jogadorAtual));
+
+        if (jogadorAtual == 'X'){
+            botoes[linha][coluna].setBackground(corX);
+        }else{
+            botoes[linha][coluna].setBackground(corO);
+        }
+
+
+        jogadorAtual = alterarJogador();
+        lblVez.setText("Vez do jogador: "+String.valueOf(jogadorAtual));
+
+
+    }
+
+    public char alterarJogador(){
+        if(jogadorAtual == 'X'){
+            lblVez.setForeground(corO);
+            return 'O';
+        }
+        lblVez.setForeground(corX);
+        return 'X';
+    }
+
+    public boolean verificarEspacoVazio(int linha, int coluna){
+        return tabuleiro[linha][coluna] == '-';
     }
 
 }
