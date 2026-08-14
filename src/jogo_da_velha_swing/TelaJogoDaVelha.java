@@ -15,6 +15,9 @@ public class TelaJogoDaVelha {
     int jogadas;
     boolean jogoAtivo;
 
+    int pontosX = 0;
+    int pontosO = 0;
+
     // Cores
     Color corFundo = new Color(0, 134, 215);
     Color corX = new Color(16, 171, 37);
@@ -24,6 +27,8 @@ public class TelaJogoDaVelha {
 
     JFrame frame;
     JLabel lblVez;
+    JLabel lblPlacarX;
+    JLabel lblPlacarO;
 
     public TelaJogoDaVelha() {
         iniciarTabuleiro();
@@ -46,7 +51,7 @@ public class TelaJogoDaVelha {
     public void iniciarInterface() {
         frame = new JFrame();
         frame.setTitle("JOGO DA VELHA");
-        frame.setSize(500, 500);
+        frame.setSize(500, 600);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -63,6 +68,25 @@ public class TelaJogoDaVelha {
         lblVez.setForeground(corX);
         painelSuperior.add(lblVez, BorderLayout.CENTER);
 
+        JPanel painelPlacar = new JPanel();
+        painelPlacar.setBorder(BorderFactory.createEmptyBorder(8, 10, 8, 10));
+
+        lblPlacarX = new JLabel("X : " + pontosX);
+        lblPlacarX.setFont(new Font("Arial", Font.BOLD, 16));
+        lblPlacarX.setForeground(corX);
+
+        lblPlacarO = new JLabel("O : " + pontosO);
+        lblPlacarO.setFont(new Font("Arial", Font.BOLD, 16));
+        lblPlacarO.setForeground(corO);
+
+        JLabel separador = new JLabel("|");
+        separador.setFont(new Font("Arial", Font.BOLD, 16));
+
+        painelPlacar.add(lblPlacarX);
+        painelPlacar.add(separador);
+        painelPlacar.add(lblPlacarO);
+
+        painelSuperior.add(painelPlacar, BorderLayout.SOUTH);
         frame.add(painelSuperior, BorderLayout.NORTH);
 
         // Grade 3x3
@@ -87,8 +111,34 @@ public class TelaJogoDaVelha {
                 grade.add(btn);
             }
         }
-
         frame.add(grade, BorderLayout.CENTER);
+
+        JPanel painelInferior = new JPanel();
+        painelInferior.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        painelInferior.setBackground(Color.DARK_GRAY);
+
+        JButton btnSair = new JButton("Sair");
+        btnSair.setFocusPainted(false);
+        JButton btnRecomecar = new JButton("novo jogo");
+        btnRecomecar.setFocusPainted(false);
+
+        painelInferior.add(btnRecomecar, BorderLayout.CENTER);
+        painelInferior.add(btnSair, BorderLayout.CENTER);
+        frame.add(painelInferior, BorderLayout.SOUTH);
+
+        btnSair.addActionListener(e -> {
+            int opc = JOptionPane.showConfirmDialog(null, "Deseja sair do sistema?", "Sair", JOptionPane.YES_NO_OPTION);
+            if (opc == JOptionPane.YES_OPTION) {
+                System.exit(0);
+            }
+
+        });
+
+        btnRecomecar.addActionListener(e -> {
+            recomeçar();
+        });
+
+
         frame.setVisible(true);
 
     }
@@ -114,6 +164,7 @@ public class TelaJogoDaVelha {
         jogadas++;
 
         if (verificarGanhador()) {
+            atualizarPlacar();
             lblVez.setText("O jogador '" + String.valueOf(jogadorAtual) + "' ganhou. Parabens!");
             lblVez.setForeground(corVencedor);
             JOptionPane.showMessageDialog(null, "O jogador '" + String.valueOf(jogadorAtual) + "' ganhou\nParabens!", "vitoria", JOptionPane.INFORMATION_MESSAGE);
@@ -171,6 +222,32 @@ public class TelaJogoDaVelha {
         }
 
         return false;
+
+    }
+
+    public void recomeçar() {
+        iniciarTabuleiro();
+        for (int i = 0; i < linhas; i++) {
+            for (int j = 0; j < colunas; j++) {
+                botoes[i][j].setText("");
+                botoes[i][j].setBackground(corFundo);
+            }
+
+        }
+
+        lblVez.setText("Vez do joogador: " + String.valueOf(jogadorAtual));
+        lblVez.setForeground(corX);
+    }
+
+    public void atualizarPlacar() {
+        if (jogadorAtual == 'X') {
+            pontosX++;
+        } else {
+            pontosO++;
+        }
+
+        lblPlacarX.setText("X : " + String.valueOf(pontosX));
+        lblPlacarO.setText("O : " + String.valueOf(pontosO));
 
     }
 
