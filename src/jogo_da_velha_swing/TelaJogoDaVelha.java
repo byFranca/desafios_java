@@ -44,7 +44,7 @@ public class TelaJogoDaVelha {
         }
 
         jogadas = 0;
-        jogadorAtual = 'X';
+        jogadorAtual = escolherJogador();
         jogoAtivo = true;
     }
 
@@ -54,6 +54,7 @@ public class TelaJogoDaVelha {
         frame.setSize(500, 600);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
 
 
         JPanel painelSuperior = new JPanel(new BorderLayout());
@@ -65,7 +66,11 @@ public class TelaJogoDaVelha {
 
         lblVez = new JLabel("Vez do jogador: " + String.valueOf(jogadorAtual), SwingConstants.CENTER);
         lblVez.setFont(new Font("Arial", Font.BOLD, 18));
-        lblVez.setForeground(corX);
+        if (jogadorAtual == 'X') {
+            lblVez.setForeground(corX);
+        } else {
+            lblVez.setForeground(corO);
+        }
         painelSuperior.add(lblVez, BorderLayout.CENTER);
 
         JPanel painelPlacar = new JPanel();
@@ -204,20 +209,32 @@ public class TelaJogoDaVelha {
 
         for (int i = 0; i < linhas; i++) {
             if (tabuleiro[i][0] == var && tabuleiro[i][1] == var && tabuleiro[i][2] == var) {
+                botoes[i][0].setBackground(corVencedor);
+                botoes[i][1].setBackground(corVencedor);
+                botoes[i][2].setBackground(corVencedor);
                 return true;
             }
 
             if (tabuleiro[0][i] == var && tabuleiro[1][i] == var && tabuleiro[2][i] == var) {
+                botoes[0][i].setBackground(corVencedor);
+                botoes[1][i].setBackground(corVencedor);
+                botoes[2][i].setBackground(corVencedor);
                 return true;
             }
 
         }
 
         if (tabuleiro[0][0] == var && tabuleiro[1][1] == var && tabuleiro[2][2] == var) {
+            botoes[0][0].setBackground(corVencedor);
+            botoes[1][1].setBackground(corVencedor);
+            botoes[2][2].setBackground(corVencedor);
             return true;
         }
 
         if (tabuleiro[0][2] == var && tabuleiro[1][1] == var && tabuleiro[2][0] == var) {
+            botoes[0][2].setBackground(corVencedor);
+            botoes[1][1].setBackground(corVencedor);
+            botoes[2][0].setBackground(corVencedor);
             return true;
         }
 
@@ -235,8 +252,13 @@ public class TelaJogoDaVelha {
 
         }
 
-        lblVez.setText("Vez do joogador: " + String.valueOf(jogadorAtual));
-        lblVez.setForeground(corX);
+        lblVez.setText("Vez do jogador: " + jogadorAtual);
+
+        if (jogadorAtual == 'X') {
+            lblVez.setForeground(corX);
+        } else {
+            lblVez.setForeground(corO);
+        }
     }
 
     public void atualizarPlacar() {
@@ -249,6 +271,30 @@ public class TelaJogoDaVelha {
         lblPlacarX.setText("X : " + String.valueOf(pontosX));
         lblPlacarO.setText("O : " + String.valueOf(pontosO));
 
+    }
+
+    public char escolherJogador() {
+        String[] opcoes = {"X começa", "O começa", "Cancelar"};
+
+        int escolha = JOptionPane.showOptionDialog(
+                null,
+                "Quem deve começar a partida?",
+                "Escolher jogador",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                opcoes,
+                opcoes[0]
+        );
+
+        if (escolha == 0) {
+            return 'X';
+        } else if (escolha == 1) {
+            return 'O';
+        } else {
+            System.exit(0);
+        }
+        return 'X';
     }
 
 }
